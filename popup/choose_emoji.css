@@ -1,0 +1,17 @@
+html,
+body {
+	width: 110%;
+	overflow: hidden;
+}
+
+#popup-content {
+	padding: 10px;
+}
+
+input {
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	font-size: 32pt;
+	padding: 10px;
+}

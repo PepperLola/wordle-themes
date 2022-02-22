@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "Wordle Themes",
+	"version": "1.0",
+
+	"description": "Customize the emojis in your Wordle report.",
+
+	"icons": {
+		"48": "icons/border-48.png"
+	},
+
+	"permissions": ["activeTab", "storage"],
+
+	"browser_action": {
+		"default_icon": "icons/border-32.png",
+		"default_title": "Wordle Themes",
+		"default_popup": "popup/choose_emoji.html"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*.nytimes.com/games/wordle/index.html"],
+			"js": ["main.js"]
+		}
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "wordle-themes@jerlshoba.com"
+		}
+	}
+}
