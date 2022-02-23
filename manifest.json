@@ -19,7 +19,7 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*.nytimes.com/games/wordle/index.html"],
-			"js": ["main.js"]
+			"js": ["browser-polyfill.js", "main.js"]
 		}
 	],
 	"browser_specific_settings": {
