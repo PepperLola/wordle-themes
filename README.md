@@ -26,8 +26,8 @@ Next, click the icon. Paste in the emojis you want to use into each of the respe
 
 ## Planned Features
 
--   An emoji picker so you don't have to copy and paste them into the extension window
--   Custom colors for letters on the screen
+- [ ]   An emoji picker so you don't have to copy and paste them into the extension window
+- [ ]   Custom colors for letters on the screen
 
 ---
 
