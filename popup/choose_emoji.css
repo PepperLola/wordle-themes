@@ -1,10 +1,12 @@
 html,
 body {
 	width: 350px;
-	height: 130px;
+	height: 230px;
 	padding: 0;
 	overflow: hidden;
 	margin: 10px 0 10px 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 #popup-content {
@@ -23,11 +25,16 @@ input {
 	height: 60px;
 	text-align: center;
 	font-size: 38pt;
-	padding: 10px;
-	display: inline;
+	padding: 15px;
+	display: block;
 	border: 1px solid silver;
 	border-radius: 10px;
 	margin-top: 5px;
+}
+
+.color {
+	height: 10px;
+	font-size: 10pt;
 }
 
 .container {
@@ -37,12 +44,17 @@ input {
 }
 
 .container label {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 14px;
 	display: block;
 	text-align: center;
 	width: 100%;
+	margin-top: 5px;
+}
+
+#note {
+	font-size: 8pt;
+	width: 100%;
+	text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {

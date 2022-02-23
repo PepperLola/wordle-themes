@@ -1,5 +1,105 @@
 let gameApp = document.querySelector('game-app');
 
+let defaultColors = {
+	default: {
+		light: {
+			correct: '#6aaa64',
+			present: '#c9b458',
+			absent: '#787c7e',
+			keyboard: '#d3d6da',
+		},
+		dark: {
+			correct: '#538d4e',
+			present: '#b59f3b',
+			absent: '#3a3a3c',
+			keyboard: '#818384',
+		},
+	},
+	highContrast: {
+		light: {
+			correct: '#f5793a',
+			present: '#85c0f9',
+			absent: '#787c7e',
+			keyboard: '#d3d6da',
+		},
+		dark: {
+			correct: '#f5793a',
+			present: '#85c0f9',
+			absent: '#3a3a3c',
+			keyboard: '#818384',
+		},
+	},
+};
+
+// set custom colors
+let gameRows = gameApp.shadowRoot.querySelectorAll('game-row');
+let keyboardButtons = gameApp.shadowRoot
+	.querySelector('game-keyboard')
+	.shadowRoot.querySelectorAll('button');
+browser.storage.sync
+	.get(['correctColor', 'presentColor', 'absentColor'])
+	.then((stored) => {
+		let darkMode = localStorage.getItem('nyt-wordle-darkmode') == 'true';
+		let highContrast = localStorage.getItem('nyt-wordle-cbmode') == 'true';
+		let contrastMode = highContrast ? 'highContrast' : 'default';
+		let mode = darkMode ? 'dark' : 'light';
+		gameRows.forEach((row) => {
+			row.shadowRoot.querySelectorAll('game-tile').forEach((tile) => {
+				let element = tile.shadowRoot.querySelector('div.tile');
+
+				let color = '#121213';
+				let evaluation = tile.getAttribute('evaluation');
+				switch (evaluation) {
+					case 'correct':
+						color =
+							stored['correctColor'] ||
+							defaultColors[contrastMode][mode][evaluation];
+						break;
+					case 'present':
+						color =
+							stored['presentColor'] ||
+							defaultColors[contrastMode][mode][evaluation];
+						break;
+					default:
+					case 'absent':
+						color =
+							stored['absentColor'] ||
+							defaultColors[contrastMode][mode][evaluation];
+						break;
+				}
+
+				element.style = `background: ${color}`;
+			});
+		});
+
+		keyboardButtons.forEach((element) => {
+			let color = '#d3d6da';
+			let evaluation = element.getAttribute('data-state');
+			switch (evaluation) {
+				case 'correct':
+					color =
+						stored['correctColor'] ||
+						defaultColors[contrastMode][mode][evaluation];
+					break;
+				case 'present':
+					color =
+						stored['presentColor'] ||
+						defaultColors[contrastMode][mode][evaluation];
+					break;
+				case 'absent':
+					color =
+						stored['absentColor'] ||
+						defaultColors[contrastMode][mode][evaluation];
+					break;
+				default:
+					color = defaultColors[contrastMode][mode]['keyboard'];
+					break;
+			}
+
+			element.style = `background: ${color}`;
+		});
+	});
+
 // day of first wordle problem?
 let startDay = new Date(2021, 5, 19, 0, 0, 0, 0);
 
