@@ -2,6 +2,8 @@
 
 _Change the emojis for correct, present, and absent letters that get copied in Wordle._
 
+[<img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="for Firefox" height="60px">](https://addons.mozilla.org/firefox/addon/wordle-themes/)
+
 ---
 
 ## What is it?
@@ -14,7 +16,7 @@ Or at least convince them that you did not, in fact, change the emojis one by on
 
 ## Installation
 
-You can install this extension on the [Firefox Add-ons Website](https://addons.mozilla.org) or on the [Chrome Webstore](https://chrome.google.com/webstore).
+You can install this extension on the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/developers/addon/wordle-themes/) or ~~on the [Chrome Webstore](https://chrome.google.com/webstore)~~ (not published yet).
 Simply click `Add to Firefox` or `Add to Chrome` to do so.
 
 ## How do I use it?
