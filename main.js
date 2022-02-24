@@ -46,70 +46,33 @@ const getOffset = () => {
 	return Math.round(difference / 864e5);
 };
 
-let colorObserver = new MutationObserver((mutationList, observer) => {
-	let mutated = mutationList
-		.filter((btn) => btn.attributeName == 'data-state')
-		.map((btn) => btn.target);
-	// second expression is dumb but we have to find elements one at a time because of shadowRoot
-	// finds each row, their shadow roots, then each tile in the row, then their shadow roots,
-	// then the actual tile element with the letter
-	// then reduces because the previous expression returns an array of arrays
-	// then removes the ones that don't have a data state because we don't change their colors
-	// which might be faster than leaving them?
-	mutated = [
-		...mutated,
-		...Array.from(gameApp.shadowRoot.querySelectorAll('game-row'))
-			.map((row) => row.shadowRoot)
-			.map((row) =>
-				Array.from(row.querySelectorAll('game-tile'))
-					.map((row) => row.shadowRoot)
-					.map((tile) => tile.querySelector('div.tile'))
-			)
-			.reduce((a, b) => [...a, ...b])
-			.filter((element) => element.getAttribute('data-state') != ''),
-	];
-	if (mutated.length < 1) return;
-	browser.storage.sync
-		.get(['correctColor', 'presentColor', 'absentColor'])
-		.then((stored) => {
-			let darkMode =
-				localStorage.getItem('nyt-wordle-darkmode') == 'true';
-			let highContrast =
-				localStorage.getItem('nyt-wordle-cbmode') == 'true';
-			let contrastMode = highContrast ? 'highContrast' : 'default';
-			let mode = darkMode ? 'dark' : 'light';
-			mutated.forEach((element) => {
-				let color = '#121213';
-				let evaluation = element.getAttribute('data-state');
-				switch (evaluation) {
-					case 'correct':
-						color =
-							stored['correctColor'] ||
-							defaultColors[contrastMode][mode][evaluation];
-						break;
-					case 'present':
-						color =
-							stored['presentColor'] ||
-							defaultColors[contrastMode][mode][evaluation];
-						break;
-					default:
-					case 'absent':
-						color =
-							stored['absentColor'] ||
-							defaultColors[contrastMode][mode][evaluation];
-						break;
-				}
-
-				element.style.background = color;
+// apply style to every game row
+browser.storage.sync
+	.get(['correctColor', 'presentColor', 'absentColor'])
+	.then((stored) => {
+		let darkMode = localStorage.getItem('nyt-wordle-darkmode') == 'true';
+		let highContrast = localStorage.getItem('nyt-wordle-cbmode') == 'true';
+		let contrastMode = highContrast ? 'highContrast' : 'default';
+		let mode = darkMode ? 'dark' : 'light';
+		let styles = `.tile[data-state="correct"], button[data-state="correct"] { background: ${
+			stored['correctColor'] ||
+			defaultColors[contrastMode][mode]['correct']
+		}}\n.tile[data-state="present"], button[data-state="present"] { background: ${
+			stored['presentColor'] ||
+			defaultColors[contrastMode][mode]['present']
+		}}\n.tile[data-state="absent"], button[data-state="absent"] { background: ${
+			stored['absentColor'] || defaultColors[contrastMode][mode]['absent']
+		}}`;
+		gameApp.shadowRoot.querySelectorAll('game-row').forEach((row) => {
+			row.shadowRoot.querySelectorAll('game-tile').forEach((tile) => {
+				let css = tile.shadowRoot.querySelector('style');
+				css.innerHTML += styles;
 			});
 		});
-});
-
-colorObserver.observe(gameKeyboard.shadowRoot, {
-	attributes: true,
-	childList: true,
-	subtree: true,
-});
+		gameApp.shadowRoot
+			.querySelector('game-keyboard')
+			.shadowRoot.querySelector('style').innerHTML += styles;
+	});
 
 // share button doesn't exist until stats container is created, so we listen for that
 const observer = new MutationObserver(() => {
