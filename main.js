@@ -54,15 +54,26 @@ browser.storage.sync
 		let highContrast = localStorage.getItem('nyt-wordle-cbmode') == 'true';
 		let contrastMode = highContrast ? 'highContrast' : 'default';
 		let mode = darkMode ? 'dark' : 'light';
-		let styles = `.tile[data-state="correct"], button[data-state="correct"] { background: ${
-			stored['correctColor'] ||
-			defaultColors[contrastMode][mode]['correct']
-		}}\n.tile[data-state="present"], button[data-state="present"] { background: ${
-			stored['presentColor'] ||
-			defaultColors[contrastMode][mode]['present']
-		}}\n.tile[data-state="absent"], button[data-state="absent"] { background: ${
-			stored['absentColor'] || defaultColors[contrastMode][mode]['absent']
-		}}`;
+		let correctColor = defaultColors[contrastMode][mode]['correct'];
+		let presentColor = defaultColors[contrastMode][mode]['present'];
+		let absentColor = defaultColors[contrastMode][mode]['absent'];
+
+		// sanitize color values
+		if (stored['correctColor']) {
+			correctColor = stored['correctColor']
+				.split(/[^0-9a-zA-Z#]/)
+				.join('');
+		}
+		if (stored['presentColor']) {
+			presentColor = stored['presentColor']
+				.split(/[^0-9a-zA-Z#]/)
+				.join('');
+		}
+		if (stored['absentColor']) {
+			absentColor = stored['absentColor'].split(/[^0-9a-zA-Z#]/).join('');
+		}
+
+		let styles = `.tile[data-state="correct"], button[data-state="correct"] { background: ${correctColor}}\n.tile[data-state="present"], button[data-state="present"] { background: ${presentColor}}\n.tile[data-state="absent"], button[data-state="absent"] { background: ${absentColor}}`;
 		gameApp.shadowRoot.querySelectorAll('game-row').forEach((row) => {
 			row.shadowRoot.querySelectorAll('game-tile').forEach((tile) => {
 				let css = tile.shadowRoot.querySelector('style');
